@@ -33,7 +33,7 @@ class ChatViewModel extends ChangeNotifier {
     String imagePath = '',
   }) =>
       _messageDataSource.sendMessage(
-        Message('', '', text, true, 'createdAt', 'userUid'),
+        Message('', text, '', true, 'createdAt', 'userUid'),
       );
 
   void selectImage(String prefix) async {
