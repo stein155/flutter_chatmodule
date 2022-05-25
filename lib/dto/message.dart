@@ -9,6 +9,7 @@ class Message {
   Message(
     this.identifier,
     this.text,
+    this.imagePath,
     this.isSender,
     this.createdAt,
     this.userUid,
