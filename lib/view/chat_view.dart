@@ -41,17 +41,22 @@ class _ChatViewState extends State<ChatView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            controller: _listViewController,
-            children: [
-              for (Message message in _chatViewModel.messages)
-                message.isSender
-                    ? SentMessageScreen(message: message)
-                    : ReceivedMessageScreen(message: message)
-            ],
-          ),
+        AnimatedBuilder(
+          animation: _chatViewModel,
+          builder: (BuildContext context, Widget? child) {
+            return Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                controller: _listViewController,
+                children: [
+                  for (Message message in _chatViewModel.messages)
+                    message.isSender
+                        ? SentMessageScreen(message: message)
+                        : ReceivedMessageScreen(message: message)
+                ],
+              ),
+            );
+          },
         ),
         Container(
           color: Colors.white,
