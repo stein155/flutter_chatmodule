@@ -1,6 +1,5 @@
 import 'package:chatmodule/dto/message.dart';
 import 'package:chatmodule/view/custom_shape.dart';
-import 'package:chatmodule/view/firebase_image.dart';
 import 'package:flutter/material.dart';
 
 class SentMessageScreen extends StatelessWidget {
@@ -37,7 +36,7 @@ class SentMessageScreen extends StatelessWidget {
                             message.text,
                             style: const TextStyle(fontSize: 14),
                           )
-                        : FirebaseImage(
+                        : Text(
                             message.imagePath,
                           ),
                     Padding(

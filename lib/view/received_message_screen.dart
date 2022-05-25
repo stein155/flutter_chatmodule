@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:chatmodule/dto/message.dart';
 import 'package:chatmodule/view/custom_shape.dart';
-import 'package:chatmodule/view/firebase_image.dart';
 import 'package:flutter/material.dart';
 
 class ReceivedMessageScreen extends StatelessWidget {
@@ -52,7 +51,7 @@ class ReceivedMessageScreen extends StatelessWidget {
                           style: const TextStyle(
                               color: Colors.black, fontSize: 14),
                         )
-                      : FirebaseImage(
+                      : Text(
                           message.imagePath,
                         ),
                   Padding(
