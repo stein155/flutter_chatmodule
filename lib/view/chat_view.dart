@@ -24,6 +24,7 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   void initState() {
+    print('initState');
     _chatViewModel = ChatViewModel();
     _chatViewModel.setDataSource(widget.messageDataSource);
     _chatViewModel.startFetchingMessages('test');
