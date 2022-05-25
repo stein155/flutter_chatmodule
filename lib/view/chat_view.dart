@@ -1,6 +1,5 @@
 import 'package:chatmodule/dto/message.dart';
-import 'package:chatmodule/service/firebase_service.dart';
-import 'package:chatmodule/service/message_service.dart';
+import 'package:chatmodule/source/message_data_source.dart';
 import 'package:chatmodule/view/received_message_screen.dart';
 import 'package:chatmodule/view/send_message_screen.dart';
 import 'package:chatmodule/view_model/chat_viewmodel.dart';
@@ -8,7 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChatView extends StatefulWidget {
-  const ChatView({Key? key}) : super(key: key);
+  final MessageDataSource messageDataSource;
+
+  const ChatView({
+    Key? key,
+    required this.messageDataSource,
+  }) : super(key: key);
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -22,6 +26,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     _chatViewModel = context.read<ChatViewModel>();
+    _chatViewModel.setDataSource(widget.messageDataSource);
     _chatViewModel.startFetchingMessages('test');
 
     super.initState();
@@ -37,15 +42,8 @@ class _ChatViewState extends State<ChatView> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<MessageService>(
-          create: (context) => MessageService(
-            backendService: FirebaseService(),
-          ),
-        ),
         ChangeNotifierProvider<ChatViewModel>(
-          create: (context) => ChatViewModel(
-            messageService: context.read<MessageService>(),
-          ),
+          create: (context) => ChatViewModel(),
         ),
       ],
       child: Column(

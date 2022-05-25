@@ -1,31 +1,25 @@
 import 'dart:async';
 import 'package:chatmodule/dto/message.dart';
-import 'package:chatmodule/service/message_service.dart';
+import 'package:chatmodule/source/message_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class ChatViewModel extends ChangeNotifier {
   List<Message> _messages = [];
-  late MessageService _messageService;
   late StreamSubscription? _messageSubscription;
+  late MessageDataSource _messageDataSource;
   final ImagePicker _imagePicker = ImagePicker();
-  final storage = FirebaseStorage.instance;
-
-  ChatViewModel({
-    required MessageService messageService,
-  }) {
-    _messageService = messageService;
-  }
 
   List<Message> get messages {
     return _messages;
   }
 
+  void setDataSource(MessageDataSource messageDataSource) {
+    _messageDataSource = messageDataSource;
+  }
+
   void startFetchingMessages(String prefix) {
-    _messageSubscription = _messageService
-        .getMessagesStream(prefix)
-        .listen((List<Message> messages) {
+    _messageDataSource.streamMessages().listen((List<Message> messages) {
       _messages = messages;
       notifyListeners();
     });
@@ -38,10 +32,8 @@ class ChatViewModel extends ChangeNotifier {
     String text = '',
     String imagePath = '',
   }) =>
-      _messageService.sendMessage(
-        prefix: prefix,
-        text: text,
-        imagePath: imagePath,
+      _messageDataSource.sendMessage(
+        Message('', text, true, 'createdAt', 'userUid'),
       );
 
   void selectImage(String prefix) async {
@@ -53,13 +45,12 @@ class ChatViewModel extends ChangeNotifier {
     );
 
     if (image != null) {
-      final file = await storage.ref(image.name).putData(
-            await image.readAsBytes(),
-          );
+      // final file = await storage.ref(image.name).putData(
+      //       await image.readAsBytes(),
+      //     );
 
-      sendMessage(
-        prefix: prefix,
-        imagePath: file.ref.fullPath,
+      _messageDataSource.sendMessage(
+        Message('', '', true, 'createdAt', 'userUid'),
       );
     }
   }
